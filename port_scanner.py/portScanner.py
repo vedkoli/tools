@@ -33,16 +33,17 @@ def port_scan(ipaddress, port):
             pass
         #print("[+] port " + str(port) + " is close")
 
+if __name__ == "__main__":
 
-target = input("[+] Enter target address (if more than one , separate win ,): ")
-start_port = input("[+]Enter staring port number : ")
-end_port = input("[+]Enter ending port number : ")
+    target = input("[+] Enter target address (if more than one , separate win ,): ")
+    start_port = input("[+]Enter staring port number : ")
+    end_port = input("[+]Enter ending port number : ")
 
-if "," in target:
-    for ip in target.split(","):
-        scan(ip.strip(" "),start_port, end_port)
-else:
-    scan(target, start_port, end_port)
+    if "," in target:
+        for ip in target.split(","):
+            scan(ip.strip(" "),start_port, end_port)
+    else:
+        scan(target, start_port, end_port)
 
 
 
