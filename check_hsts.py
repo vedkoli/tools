@@ -36,13 +36,13 @@ def main():
                 failed_urls.append(url)
 
         print("\nHSTS Enabled URLs:")
-        print(hsts_enabled if hsts_enabled else "None")
+        print("\n".join(hsts_enabled) if hsts_enabled else "None")
 
         print("\nHSTS Not Enabled URLs:")
-        print(hsts_disabled if hsts_disabled else "None")
+        print("\n".join(hsts_disabled) if hsts_disabled else "None")
 
         print("\nFailed to Check:")
-        print(failed_urls if failed_urls else "None")
+        print("\n".join(failed_urls) if failed_urls else "None")
 
     except FileNotFoundError:
         print(f"Error: {input_file} not found.")
