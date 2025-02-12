@@ -2,38 +2,41 @@ import requests
 from collections import defaultdict
 
 def get_server_info(url):
-    """Check if a URL has a 'Server' header and return it if the response is 200."""
+    """Check if a URL has a 'Server' header and return it if the response is 200 OK."""
     try:
         response = requests.get(url, timeout=5, allow_redirects=True)
         if response.status_code == 200:
-            return response.headers.get("Server", "Unknown")  # Return 'Unknown' if no Server header
+            return response.headers.get("Server", "Unknown")  # If no 'Server' header, return 'Unknown'
     except requests.exceptions.RequestException:
         return None  # Return None if request fails
     return None
 
-def format_url(url):
-    """Ensure the URL starts with https://"""
-    url = url.strip()
-    if not url.startswith(("http://", "https://")):
-        url = "https://" + url  # Default to HTTPS
-    return url
+def format_urls(url):
+    """Generate both HTTP and HTTPS versions of the URL."""
+    url = url.strip().lstrip("http://").lstrip("https://")  # Remove existing scheme
+    return [f"http://{url}", f"https://{url}"]
 
 def main():
     input_file = "urls.txt"
 
     try:
         with open(input_file, "r") as f:
-            urls = [format_url(line) for line in f if line.strip()]  # Clean URLs
+            urls = [line.strip() for line in f if line.strip()]  # Read and clean URLs
 
         server_dict = defaultdict(list)
 
         for url in urls:
-            server = get_server_info(url)
-            if server:  # Only add if server info is found
-                server_dict[server].append(url)
+            http_url, https_url = format_urls(url)
+
+            # Check HTTPS first, then HTTP if HTTPS fails
+            for test_url in [https_url, http_url]:
+                server = get_server_info(test_url)
+                if server:
+                    server_dict[server].append(test_url)
+                    break  # Stop after finding the first successful response
 
         if server_dict:
-            print("\nServer Information:")
+            print("\nServer Information (200 OK Responses Only):")
             for server, url_list in server_dict.items():
                 print(f"\n{server}:")
                 print("\n".join(url_list))
