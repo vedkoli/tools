@@ -1,36 +1,42 @@
 import requests
 
-def check_hsts_header(url):
+def check_hsts(url):
     try:
-        response = requests.get(url, timeout=5)
-        if response.status_code == 200:
-            hsts_header = response.headers.get('Strict-Transport-Security')
-            if hsts_header:
-                return True, hsts_header
-            else:
-                return False, None
-        else:
-            return None, None
-    except requests.RequestException as e:
-        print(f"Error fetching {url}: {e}")
-        return None, None
+        response = requests.get(url, timeout=5, allow_redirects=True)
+        if 'strict-transport-security' in response.headers:
+            return True
+        return False
+    except requests.exceptions.RequestException:
+        return None
 
 def main():
-    # Take input URLs separated by commas
-    urls_input = input("Enter URLs separated by commas: ")
-    urls = [url.strip() for url in urls_input.split(',')]
+    input_file = "urls.txt"
+    output_file = "hsts_results.txt"
 
-    for url in urls:
-        if not url.startswith(('http://', 'https://')):
-            url = 'https://' + url
+    try:
+        with open(input_file, "r") as f:
+            urls = [line.strip() for line in f if line.strip()]
 
-        has_hsts, hsts_header = check_hsts_header(url)
-        if has_hsts is None:
-            print(f"{url} did not return a 200 OK response.")
-        elif has_hsts:
-            print(f"{url} has HSTS header set: {hsts_header}")
-        else:
-            print(f"{url} does not have HSTS header set.")
+        results = []
+        for url in urls:
+            if not url.startswith("http"):
+                url = "https://" + url  # Default to HTTPS if not provided
+
+            status = check_hsts(url)
+            if status is True:
+                results.append(f"{url} - HSTS Enabled")
+            elif status is False:
+                results.append(f"{url} - HSTS Not Enabled")
+            else:
+                results.append(f"{url} - Failed to Check")
+
+        with open(output_file, "w") as f:
+            f.write("\n".join(results))
+
+        print(f"Check completed! Results saved in {output_file}")
+
+    except FileNotFoundError:
+        print(f"Error: {input_file} not found.")
 
 if __name__ == "__main__":
     main()
