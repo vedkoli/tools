@@ -1,39 +1,48 @@
 import requests
 
 def check_hsts(url):
+    """Check if a URL has the HSTS header enabled."""
     try:
         response = requests.get(url, timeout=5, allow_redirects=True)
-        if 'strict-transport-security' in response.headers:
-            return True
-        return False
+        return 'strict-transport-security' in response.headers
     except requests.exceptions.RequestException:
-        return None
+        return None  # Return None if request fails
+
+def format_url(url):
+    """Ensure the URL starts with https://"""
+    url = url.strip()
+    if not url.startswith(("http://", "https://")):
+        url = "https://" + url  # Default to HTTPS
+    return url
 
 def main():
     input_file = "urls.txt"
-    output_file = "hsts_results.txt"
 
     try:
         with open(input_file, "r") as f:
-            urls = [line.strip() for line in f if line.strip()]
+            urls = [format_url(line) for line in f if line.strip()]  # Clean URLs
 
-        results = []
+        hsts_enabled = []
+        hsts_disabled = []
+        failed_urls = []
+
         for url in urls:
-            if not url.startswith("http"):
-                url = "https://" + url  # Default to HTTPS if not provided
-
             status = check_hsts(url)
             if status is True:
-                results.append(f"{url} - HSTS Enabled")
+                hsts_enabled.append(url)
             elif status is False:
-                results.append(f"{url} - HSTS Not Enabled")
+                hsts_disabled.append(url)
             else:
-                results.append(f"{url} - Failed to Check")
+                failed_urls.append(url)
 
-        with open(output_file, "w") as f:
-            f.write("\n".join(results))
+        print("\nHSTS Enabled URLs:")
+        print(hsts_enabled if hsts_enabled else "None")
 
-        print(f"Check completed! Results saved in {output_file}")
+        print("\nHSTS Not Enabled URLs:")
+        print(hsts_disabled if hsts_disabled else "None")
+
+        print("\nFailed to Check:")
+        print(failed_urls if failed_urls else "None")
 
     except FileNotFoundError:
         print(f"Error: {input_file} not found.")
