@@ -30,7 +30,8 @@ def main():
         
         for url in urls:
             server_info, response_code = get_server_info(url)
-            print(f"{url} - {server_info} - {response_code}")
+            if response_code == "200":  # Only show URLs with a 200 response code
+                print(f"{url} - {server_info} - {response_code}")
 
     except FileNotFoundError:
         print(f"Error: {input_file} not found.")
