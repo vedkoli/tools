@@ -36,6 +36,18 @@ server -(selected tls and cipher)
 server -(my digital certificate) clint verifies.
 Key exchange - between both.
 
+10) OSI MODEL :
+APPLICATION : https, tls, ftp, ssh
+PRESENTATION : Translation of data
+SESSION : session window and session management 
+TRANSPORT : protocol and port number
+NETWORK : routing protocols, between 2 diff ntwks
+MAC : mac address, in one network 
+PHYSICAL : bits on wire 
+
+11) Oswap top 10:
+
+
  
 
 
