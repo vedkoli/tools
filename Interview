@@ -17,5 +17,16 @@ some also use salting process
 vulnerability with SMBv1.
 due to improper handling of specially crafted SMB packets sent to the target. can lead to RCE.
 
-6) 
+6) Starttls
+
+7) Weak Ciphers in Cryptography:
+insecure due to outdated designs, small key sizes, or known vulnerabilities.
+small key size can crack with morden GPUs.
+e.g: MD5, SHA1,RC4
+attacks like POODLE
+
+8) 
+
+
+
 
