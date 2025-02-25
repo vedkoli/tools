@@ -11,5 +11,11 @@ some also use salting process
 
 3) How can u recon a network:
 
+4) Ftp port 21: nmap script, anonymous, version, brute-force 
 
+5) Eternal blue ms17-010:
+vulnerability with SMBv1.
+due to improper handling of specially crafted SMB packets sent to the target. can lead to RCE.
+
+6) 
 
