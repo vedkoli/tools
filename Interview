@@ -1,1 +1,15 @@
 
+1) What is TLS FALLBACK SCSV used for :
+Prevents attackers from downgrading TLS versions.
+Helps enforce strong encryption.
+Protects against POODLE and similar attacks.
+
+2) Password hashing:
+one way function ,fixed length string using cryptographic algorithm, password hashes are stored in DB insureing prevent password leak,
+bcript, script , argon2, sha-256
+some also use salting process
+
+3) How can u recon a network:
+
+
+
