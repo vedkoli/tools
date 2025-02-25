@@ -22,10 +22,21 @@ due to improper handling of specially crafted SMB packets sent to the target. ca
 7) Weak Ciphers in Cryptography:
 insecure due to outdated designs, small key sizes, or known vulnerabilities.
 small key size can crack with morden GPUs.
-e.g: MD5, SHA1,RC4
+e.g: MD5, SHA1,RC4, DES
 attacks like POODLE
 
-8) 
+8) Can CBC ciphers used in TLS 1.2?
+  They can be used but are avoided bcuz of considered weak,they have multiple vulnerabilities like poodle attack, etc.
+Block of data are encrypted and are depend on pervious block.makes it suseptible to padding oracle attack like attacks.
+
+9) TLS handshake :
+   It happens whenever a secure connection is initiated between client and server using https, ftps, smpts n other TLS based protocols.
+client - ( tls versions and ciphers) 
+server -(selected tls and cipher)
+server -(my digital certificate) clint verifies.
+Key exchange - between both.
+
+ 
 
 
 
