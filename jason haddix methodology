@@ -1,0 +1,32 @@
+1)open ports - defaults creds, service level exploits
+2)web hosting software - possible login method,config file , bug associated to framework itself
+3) Application frame work - same as aBove
+4) Application  custom code or COTS : Custom modifications and pages added to framework as per compnay needs , where where SQL, IDOR, ETC WILL get
+5) Appilcation Libraries ( usualy JS) associated vulnerabilites
+5) Integartion : our application to other application comunication
+
+------------PRE TESTING STUFF ---------------
+[x] TECH PROFILING [ BROWSER EXTENTIONS ] : Wappalyzer , Whatruns
+
+[x] Finding CVS's and Misconfigs : 
+We need to analyze if target have - ( weakness reated to non-custom code)
+Known vulnerabilities, Framework login pages, Default Creds, etc 
+These are usually Platforms, Application server, Framework, CMS ,Library and misconfiguration
+TOOLS : Nuclie , Sn1per , Jaeles scanner , react.js ,Gofinferprint , vulners, intrigue core
+
+[x] Port scan : tool= naabu -host abc.com
+
+---------CONTENT DISCOVERY ---------------
+TOOLS: FEROXBUSTER , Turbo Intrufer , Gobuster, Fuff (contol respose filter code ), Wfuzz, Dirsearch.
+Discovery list : image 
+Keep in mind : everything you get 401 as response code  -> you should consider recursion 
+
+
+
+
+
+
+
+In scope :
+Domain: *.kmd.dk, *.kmd.net, *.kmdpoland.pl
+
