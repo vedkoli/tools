@@ -65,7 +65,7 @@ cat > ssrf-test.svg <<EOF
 </svg>
 EOF
 
-Windows PowerShell::::::::::::::::::::::::::::
+Create file with Windows PowerShell::::::::::::::::::::::::::::
 @"
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -98,10 +98,10 @@ If the server uses ImageMagick, it may trigger an SSRF or RCE.
 
 
 🔍 6. Null Byte and CRLF Injection in Filename
-Purpose:
+Purpose : 
 To bypass backend validation by manipulating the filename field.
-How to Perform:
-Upload a file with filename:
+How to Perform : 
+Upload a file with filename : 
 shell.php%00.jpg (Null byte)
 evil.jpg%0d%0asome-header: value (CRLF)
 Observe whether:
