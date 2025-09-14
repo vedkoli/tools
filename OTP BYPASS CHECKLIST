@@ -1,3 +1,7 @@
+First : Login correctly with valid otp and note 
+1) OTP sucess response from server And 2) post otp endpoint urls or http headers.
+
+Testing :
 1. Submit blank, malformed, or excessively long OTPs.Analyze error in response
 2. Attempt predictable OTP guesses , RANDOM NUMBER 
 3. Submit requests missing the OTP field entirely.
